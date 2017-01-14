@@ -54,6 +54,10 @@ static NSString  *const kReuseIdentifier = @"kReuseIdentifier";
     [self.navigationController pushViewController:renderViewController animated:YES];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 100.f;
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

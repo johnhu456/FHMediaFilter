@@ -52,30 +52,30 @@
     AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL fileURLWithPath:self.filterManager.outputPath]];
     self.player = player;
     AVPlayerLayer *playLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-    playLayer.frame = CGRectMake(10, 70, self.filterManager.compSize.width, self.filterManager.compSize.height);
+    playLayer.frame = CGRectMake(0, 80, self.filterManager.compSize.width, self.filterManager.compSize.height);
     [self.view.layer addSublayer:playLayer];
     [player play];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playRepeat:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
 }
 
 - (void)composeVideo {
-    FHMediaComponentImage *imageComponent = [FHMediaComponentImage imageComponentWithName:self.imageName rect:CGRectMake(0, 0, 400, 300)];
+    FHMediaComponentImage *imageComponent = [FHMediaComponentImage imageComponentWithName:self.imageName rect:CGRectMake(0, 0, 375, 300)];
     imageComponent.clipEndSeconds = 3.f;
     self.video.clipEndSeconds = 3.f;
-    self.video.clipRect = CGRectMake(0, 0, 400, 300);
+    self.video.clipRect = CGRectMake(0, 0, 375, 300);
     FHMediaFilterManager *filterManager = [[FHMediaFilterManager alloc] init];
     filterManager.delegate = self;
-    [filterManager addComponent:imageComponent];
-    [filterManager addComponent:self.video];
-    filterManager.about = @"Comp 2 videos text at full screen 2x size with subtitles";
-    filterManager.destination = @"result";
-    filterManager.source = @"Comp.plist";
-    filterManager.comepDurationSeconds = 3;
-    filterManager.compFramesPerSecond = 30;
-    filterManager.compSize = CGSizeMake(400, 300);
-    filterManager.compScale = 0;
-    filterManager.font = [UIFont fontWithName:@"AmericanTypewriter" size:14];
-    filterManager.fontSize = 14;
+    [filterManager addComponent:imageComponent]; //添加图片
+    [filterManager addComponent:self.video];  //添加视频
+    filterManager.about = @"Comp 2 videos text at full screen 2x size with subtitles"; //没什么用
+    filterManager.destination = @"result";  //输出文件名
+    filterManager.source = @"Comp.plist"; //没什么用
+    filterManager.comepDurationSeconds = 3;  //持续时间
+    filterManager.compFramesPerSecond = 30;  //帧数
+    filterManager.compSize = CGSizeMake(400, 300);  //大小
+    filterManager.compScale = 0; //屏幕像素倍数
+    filterManager.font = [UIFont fontWithName:@"AmericanTypewriter" size:14];  //暂时没什么用
+    filterManager.fontSize = 14;  //暂时没用
     self.filterManager = filterManager;
     [filterManager startComposeAndOutput];
 }
