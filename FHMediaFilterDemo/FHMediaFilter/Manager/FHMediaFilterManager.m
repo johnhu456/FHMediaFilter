@@ -94,6 +94,8 @@ static NSString *const kKeyFontColor = @"FontColor";
 static NSString *const kKeyHighQualityInterpolation = @"HighQualityInterpolation";
 static NSString *const kkeyCompClips = @"CompClips";
 
+static NSString *const kErrorDomain = @"FHVideoFilterManager Compose Error";
+
 @implementation FHMediaFilterManager
 
 #pragma mark - Lazy Init 
@@ -106,6 +108,9 @@ static NSString *const kkeyCompClips = @"CompClips";
 
 #pragma mark - Component
 -(void)addComponent:(FHMediaComponent *)component {
+    if (component == nil) {
+        return;
+    }
     [self.components addObject:component];
 }
 
@@ -178,6 +183,9 @@ static NSString *const kkeyCompClips = @"CompClips";
 #pragma mark - Private Method
 - (void)finishedLoadNotification:(NSNotification*)notification
 {
+    if ([self.delegate respondsToSelector:@selector(filterManager:doneWithState:error:)]) {
+        [self.delegate filterManager:self doneWithState:FHMediaFilterStateComposeSuccess error:nil];
+    }
     NSLog(@"finished rendering lossless movie");
     NSLog(@"%@",self.composition.destination);
     //转换
@@ -188,14 +196,22 @@ static NSString *const kkeyCompClips = @"CompClips";
         [[NSFileManager defaultManager] removeItemAtPath:outPath error:nil];
     }
     NSLog(@"%@",outPath);
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(encode:) name:AVAssetWriterConvertFromMaxvidCompletedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(encode:) name:AVAssetWriterFinishedWriteCompletedNotification object:nil];
     testReader.outputPath = outPath;
     self.testReader = testReader;
-    [testReader blockingEncode];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [testReader blockingEncode];
+    });
 }
 
 - (void)failedToLoadNotification:(NSNotification*)notification
 {
+    if ([self.delegate respondsToSelector:@selector(filterManager:doneWithState:error:)]) {
+        AVOfflineComposition *comp = (AVOfflineComposition*)notification.object;
+        NSString *errorString = comp.errorString;
+        NSError *error = [NSError errorWithDomain:kErrorDomain code:0 userInfo:@{@"info":errorString}];
+        [self.delegate filterManager:self doneWithState:FHMediaFilterStateComposeSuccess error:error];
+    }
     AVOfflineComposition *comp = (AVOfflineComposition*)notification.object;
     
     NSString *errorString = comp.errorString;
@@ -204,6 +220,8 @@ static NSString *const kkeyCompClips = @"CompClips";
 }
 
 - (void)encode:(NSNotification *)notification {
+    
+    NSLog(@"haole");
     NSLog(@"%@",notification);
 }
 

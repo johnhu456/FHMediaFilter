@@ -54,6 +54,7 @@ typedef enum
 // can check the object.state value to determine the actual result.
 
 extern NSString * const AVAssetWriterConvertFromMaxvidCompletedNotification;
+extern NSString * const AVAssetWriterFinishedWriteCompletedNotification;
 
 // AVAssetWriterConvertFromMaxvid
 

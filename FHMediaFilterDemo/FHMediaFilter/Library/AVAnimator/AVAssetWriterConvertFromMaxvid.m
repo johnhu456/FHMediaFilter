@@ -37,6 +37,7 @@
 // Notification name constants
 
 NSString * const AVAssetWriterConvertFromMaxvidCompletedNotification = @"AVAssetWriterConvertFromMaxvidCompletedNotification";
+NSString * const AVAssetWriterFinishedWriteCompletedNotification = @"AVAssetWriterFinishedWriteCompletedNotification";
 
 // Private API
 
@@ -364,6 +365,7 @@ NSString * const AVAssetWriterConvertFromMaxvidCompletedNotification = @"AVAsset
   [videoWriter finishWriting];
 #pragma clang diagnostic pop
 #endif
+  [[NSNotificationCenter defaultCenter] postNotificationName:AVAssetWriterFinishedWriteCompletedNotification object:nil];
 }
 
 #define EMIT_FRAMES 0

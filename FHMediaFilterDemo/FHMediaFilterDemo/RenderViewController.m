@@ -9,6 +9,8 @@
 #import "RenderViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
+
+#import "ResultPreViewController.h"
 #import "FHMediaFilterManager.h"
 
 #import "FilterCollectionViewCell.h"
@@ -21,7 +23,10 @@
 
 @property (nonatomic, strong) NSMutableArray<UIImage *> *videoThumbnails;
 
+@property (nonatomic, strong) FHMediaComponentVideo *video;
+
 @end
+
 static NSString *const kReuseIdentifier = @"kReuseIdentifier";
 @implementation RenderViewController
 
@@ -81,7 +86,8 @@ static NSString *const kReuseIdentifier = @"kReuseIdentifier";
 }
 
 - (void)handleDoneButton:(UIBarButtonItem *)sender {
-    
+    ResultPreViewController *previewVC = [[ResultPreViewController alloc] initWithImageName:self.imageName video:self.video];
+    [self.navigationController pushViewController: previewVC animated:YES];
 }
 
 #pragma mark - UICollectionViewDataSource/Delegate
@@ -107,18 +113,20 @@ static NSString *const kReuseIdentifier = @"kReuseIdentifier";
         while (self.imageView.subviews.count) {
             [self.imageView.subviews[0] removeFromSuperview];
         }
-        FHMediaComponentVideo *video = [FHMediaComponentVideo videoComponentWithName:[NSString stringWithFormat:@"%ld",(long)indexPath.row] type:@"m4v" rect:self.imageView.frame];
+        FHMediaComponentVideo *video = [FHMediaComponentVideo videoComponentWithName:[NSString stringWithFormat:@"%ld",(long)indexPath.row] type:@"m4v" rect:self.imageView.bounds];
         FHAnimatorView *view = [[FHAnimatorView alloc] initWithComponents:video frame:self.imageView.bounds];
         [self.imageView addSubview:view];
         [view startAnimateWithRepeat:YES];
+        self.video = video;
     }else {
         while (self.imageView.subviews.count) {
             [self.imageView.subviews[0] removeFromSuperview];
         }
-        FHMediaComponentVideo *video = [FHMediaComponentVideo videoComponentWithName:[NSString stringWithFormat:@"%ld",(long)indexPath.row] type:@"mov" rect:self.imageView.frame];
+        FHMediaComponentVideo *video = [FHMediaComponentVideo videoComponentWithName:[NSString stringWithFormat:@"%ld",(long)indexPath.row] type:@"mov" rect:self.imageView.bounds];
         FHAnimatorView *view = [[FHAnimatorView alloc] initWithComponents:video frame:self.imageView.bounds];
         [self.imageView addSubview:view];
         [view startAnimateWithRepeat:YES];
+        self.video = video;
     }
 }
 
