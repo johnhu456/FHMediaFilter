@@ -7,8 +7,26 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 #import "FHMediaComponent.h"
+#import "FHMediaComponentVideo.h"
+
+#import "AVMvidFrameDecoder.h"
+#import "AVFileUtil.h"
+#import "AVAssetJoinAlphaResourceLoader.h"
+#import "AVAnimatorMedia.h"
+#import "AVAnimatorView.h"
+
+#pragma mark - SubClass of AVAnimatorView
+@interface FHAnimatorView : AVAnimatorView
+
+- (instancetype)initWithComponents:(FHMediaComponentVideo *)component
+                                            frame:(CGRect)frame;
+
+- (void)startAnimateWithRepeat:(BOOL)repeat;
+
+@end
 
 @interface FHMediaFilterManager : NSObject
 
@@ -27,6 +45,9 @@
  Media components array;
  */
 @property (nonatomic, strong, readonly) NSMutableArray<FHMediaComponent*> *components;
+
+
+@property (nonatomic, strong) AVAnimatorView *currentAnimatorView;
 
 - (void)addComponent:(FHMediaComponent *)component;
 

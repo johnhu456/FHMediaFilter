@@ -17,6 +17,58 @@
 
 #import "NSMutableDictionary+FHMediaFilterExtension.h"
 
+@interface FHAnimatorView() {
+    BOOL _repeat;
+    AVAnimatorMedia *_mediaCopy;
+}
+@end
+@implementation FHAnimatorView
+
+- (instancetype)initWithComponents:(FHMediaComponentVideo *)component frame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        AVAssetJoinAlphaResourceLoader *resLoader = [AVAssetJoinAlphaResourceLoader aVAssetJoinAlphaResourceLoader];
+        resLoader.movieRGBFilename = component.rgbVideoName;
+        resLoader.movieAlphaFilename = component.alphaVideoName;
+        resLoader.outPath = [AVFileUtil getTmpDirPath:component.clipSource];
+        resLoader.alwaysGenerateAdler = TRUE;
+        resLoader.serialLoading = TRUE;
+        
+        AVAnimatorMedia *media = [AVAnimatorMedia aVAnimatorMedia];
+        media.resourceLoader = resLoader;
+        media.frameDecoder = [AVMvidFrameDecoder aVMvidFrameDecoder];
+        _mediaCopy = media;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAnimatorFinished:) name:AVAnimatorDidStopNotification object:nil];
+    }
+    return self;
+}
+
+- (void)didMoveToSuperview {
+    [super didMoveToSuperview];
+    [self attachMedia:_mediaCopy];
+    
+}
+
+- (void)startAnimateWithRepeat:(BOOL)repeat {
+    _repeat = repeat;
+    [_mediaCopy startAnimator];
+}
+
+- (void)handleAnimatorFinished:(NSNotification *)notification {
+    [_mediaCopy stopAnimator];
+    [self attachMedia:nil];
+    if (_repeat) {
+        [self attachMedia:_mediaCopy];
+        [_mediaCopy startAnimator];
+    }
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+@end
+
 @interface FHMediaFilterManager()
 
 @property (nonatomic, strong, readwrite) NSMutableArray<FHMediaComponent*> *components;
@@ -62,9 +114,10 @@ static NSString *const kkeyCompClips = @"CompClips";
     //将背景视频转换为mvid
     for (FHMediaComponent *component in self.components) {
         if ([component isKindOfClass:[FHMediaComponentVideo class]]){
+            FHMediaComponentVideo *video = (FHMediaComponentVideo *)component;
             AVAssetJoinAlphaResourceLoader *resLoader = [AVAssetJoinAlphaResourceLoader aVAssetJoinAlphaResourceLoader];
-            resLoader.movieRGBFilename = [NSString stringWithFormat:@"%@.mov",component.clipSource];
-            resLoader.movieAlphaFilename = [NSString stringWithFormat:@"%@.mov",component.clipSource];
+            resLoader.movieRGBFilename = video.rgbVideoName;
+            resLoader.movieAlphaFilename = video.alphaVideoName;
             resLoader.outPath = [AVFileUtil getTmpDirPath:[NSString stringWithFormat:@"%@.mvid",component.clipSource]];
             resLoader.alwaysGenerateAdler = TRUE;
             resLoader.serialLoading = TRUE;

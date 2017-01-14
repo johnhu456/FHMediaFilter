@@ -7,42 +7,51 @@
 //
 
 #import "ViewController.h"
+
+#import "RenderViewController.h"
+
 #import "FHMediaFilterManager.h"
 #import "FHMediaComponentVideo.h"
 #import "FHMediaComponentImage.h"
 
-@interface ViewController ()
+@interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
+
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) FHMediaFilterManager *filterManager;
 @end
+
+static NSString  *const kReuseIdentifier = @"kReuseIdentifier";
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    self.window = self.view.window;
-    
-    [self.view.window removeFromSuperview];
-    FHMediaComponentImage *imageComponent = [FHMediaComponentImage imageComponentWithName:@"6" rect:self.view.frame];
-    imageComponent.clipEndSeconds = 3.f;
-    FHMediaComponentVideo *videoComponent = [FHMediaComponentVideo videoComponentWithName:@"0113snow_screen" rect:self.view.frame];
-    videoComponent.clipEndSeconds = 3.f;
-    FHMediaFilterManager *filterManager = [[FHMediaFilterManager alloc] init];
-    [filterManager addComponent:imageComponent];
-    [filterManager addComponent:videoComponent];
-    filterManager.about = @"Comp 2 videos text at full screen 2x size with subtitles";
-    filterManager.destination = @"new.mvid";
-    filterManager.source = @"Comp.plist";
-    filterManager.comepDurationSeconds = 3;
-    filterManager.compFramesPerSecond = 30;
-    filterManager.compSize = self.view.frame.size;
-    filterManager.compScale = 0;
-    filterManager.font = [UIFont fontWithName:@"AmericanTypewriter" size:14];
-    filterManager.fontSize = 14;
-    self.filterManager = filterManager;
-    NSLog(@"%@",[filterManager getDic]);
-    [filterManager startFilter];
-    // Do any additional setup after loading the view, typically from a nib.
+}
+
+#pragma mark - UITableViewDataSource/Delegate
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 8;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *imageCell = [tableView dequeueReusableCellWithIdentifier:kReuseIdentifier];
+    if (imageCell == nil) {
+        imageCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kReuseIdentifier];
+    }
+    imageCell.imageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"%ld",(long)indexPath.row]];
+    return imageCell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *imageName = [NSString stringWithFormat:@"%ld",(long)indexPath.row];
+    RenderViewController *renderViewController = [[RenderViewController alloc] initWithNibName:@"RenderViewController" bundle:nil];
+    renderViewController.imageName = imageName;
+    [self.navigationController pushViewController:renderViewController animated:YES];
 }
 
 
