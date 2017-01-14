@@ -15,8 +15,6 @@
     result.clipRect = rect;
     result.clipSource = name;
     result.clipType = FHMediaComponentTypeImage;
-//    result.clipScaleFramePerSecond = NO;
-    //clipStartSeconds and clipEndSeconds 默认与FHMediaFilteManager的长度一致，
     return result;
 }
 @end

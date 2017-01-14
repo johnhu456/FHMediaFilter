@@ -18,25 +18,30 @@
 #import "NSMutableDictionary+FHMediaFilterExtension.h"
 
 @interface FHAnimatorView() {
+    //重复播放标记
     BOOL _repeat;
+    //相关联的media的指针拷贝
     AVAnimatorMedia *_mediaCopy;
 }
 @end
+
 @implementation FHAnimatorView
 
 - (instancetype)initWithComponents:(FHMediaComponentVideo *)component frame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        //加载资源
         AVAssetJoinAlphaResourceLoader *resLoader = [AVAssetJoinAlphaResourceLoader aVAssetJoinAlphaResourceLoader];
         resLoader.movieRGBFilename = component.rgbVideoName;
         resLoader.movieAlphaFilename = component.alphaVideoName;
         resLoader.outPath = [AVFileUtil getTmpDirPath:component.clipSource];
         resLoader.alwaysGenerateAdler = TRUE;
         resLoader.serialLoading = TRUE;
-        
+        //生成媒体文件
         AVAnimatorMedia *media = [AVAnimatorMedia aVAnimatorMedia];
         media.resourceLoader = resLoader;
         media.frameDecoder = [AVMvidFrameDecoder aVMvidFrameDecoder];
         _mediaCopy = media;
+        //监听播放结束的通知
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAnimatorFinished:) name:AVAnimatorDidStopNotification object:nil];
     }
     return self;
@@ -44,6 +49,7 @@
 
 - (void)didMoveToSuperview {
     [super didMoveToSuperview];
+    //只有被加载到superView后，才可以关联媒体文件。
     [self attachMedia:_mediaCopy];
     
 }
@@ -54,9 +60,11 @@
 }
 
 - (void)handleAnimatorFinished:(NSNotification *)notification {
+    //结束关联
     [_mediaCopy stopAnimator];
     [self attachMedia:nil];
     if (_repeat) {
+        //重新播放
         [self attachMedia:_mediaCopy];
         [_mediaCopy startAnimator];
     }
@@ -73,9 +81,15 @@
 
 @property (nonatomic, strong, readwrite) NSMutableArray<FHMediaComponent*> *components;
 
+/**
+ 组件合成器
+ */
 @property (nonatomic, strong) AVOfflineComposition *composition;
 
-@property (nonatomic, strong) AVAssetWriterConvertFromMaxvid *testReader;
+/**
+ 文件转换器
+ */
+@property (nonatomic, strong) AVAssetWriterConvertFromMaxvid *converter;
 
 @end
 
@@ -94,6 +108,7 @@ static NSString *const kKeyFontColor = @"FontColor";
 static NSString *const kKeyHighQualityInterpolation = @"HighQualityInterpolation";
 static NSString *const kkeyCompClips = @"CompClips";
 
+#pragma mark - ErrorDomain
 static NSString *const kErrorDomain = @"FHVideoFilterManager Compose Error";
 
 @implementation FHMediaFilterManager
@@ -115,7 +130,7 @@ static NSString *const kErrorDomain = @"FHVideoFilterManager Compose Error";
 }
 
 #pragma mark - Public Method
-- (void)startFilter {
+- (void)startComposeAndOutput {
     //将背景视频转换为mvid
     for (FHMediaComponent *component in self.components) {
         if ([component isKindOfClass:[FHMediaComponentVideo class]]){
@@ -129,7 +144,6 @@ static NSString *const kErrorDomain = @"FHVideoFilterManager Compose Error";
             [resLoader load];
         }
     }
-
     AVOfflineComposition *comp = [AVOfflineComposition aVOfflineComposition];
     
 #if defined(HAS_LIB_COMPRESSION_API)
@@ -140,6 +154,8 @@ static NSString *const kErrorDomain = @"FHVideoFilterManager Compose Error";
 #endif // HAS_LIB_COMPRESSION_API
     
     self.composition = comp;
+    
+    //监听合成结果通知
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(finishedLoadNotification:)
@@ -154,14 +170,21 @@ static NSString *const kErrorDomain = @"FHVideoFilterManager Compose Error";
     
     NSLog(@"start rendering lossless movie in background");
     NSDictionary *dic = [self getDic];
+    //开始合成
     [comp compose:dic];
 }
 
+- (NSString *)outputPath {
+    return self.converter.outputPath;
+}
+
+#pragma mark - Private Method
+//解析成字典
 - (NSDictionary *)getDic {
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     [result fh_setObject:self.about forKey:kKeyAbout];
     [result fh_setObject:self.source forKey:kKeySource];
-    [result fh_setObject:self.destination forKey:kKeyDestination];
+    [result fh_setObject:[NSString stringWithFormat:@"%@.mvid",self.destination] forKey:kKeyDestination];
     [result fh_setObject:@(self.comepDurationSeconds) forKey:kKeyCompDurationSeconds];
     [result fh_setObject:@(self.compFramesPerSecond) forKey:kKeyCompFramesPerSecond];
     [result fh_setObject:@(self.compSize.width) forKey:kKeyCompWidth];
@@ -180,25 +203,23 @@ static NSString *const kErrorDomain = @"FHVideoFilterManager Compose Error";
     return result;
 }
 
-#pragma mark - Private Method
 - (void)finishedLoadNotification:(NSNotification*)notification
 {
     if ([self.delegate respondsToSelector:@selector(filterManager:doneWithState:error:)]) {
         [self.delegate filterManager:self doneWithState:FHMediaFilterStateComposeSuccess error:nil];
     }
-    NSLog(@"finished rendering lossless movie");
-    NSLog(@"%@",self.composition.destination);
+    NSLog(@"finished rendering lossless movie in : %@",self.composition.destination);
     //转换
     AVAssetWriterConvertFromMaxvid  *testReader = [AVAssetWriterConvertFromMaxvid aVAssetWriterConvertFromMaxvid];
     testReader.inputPath = self.composition.destination;
-    NSString *outPath = [AVFileUtil getTmpDirPath:@"test.m4v"];
+    NSString *outPath = [AVFileUtil getTmpDirPath:[NSString stringWithFormat:@"%@.m4v",self.destination]];
     if ([[NSFileManager defaultManager] fileExistsAtPath:outPath]){
         [[NSFileManager defaultManager] removeItemAtPath:outPath error:nil];
     }
-    NSLog(@"%@",outPath);
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(encode:) name:AVAssetWriterFinishedWriteCompletedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishedConvert:) name:AVAssetWriterFinishedWriteCompletedNotification object:nil];
     testReader.outputPath = outPath;
-    self.testReader = testReader;
+    self.converter = testReader;
+    //开始转码
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [testReader blockingEncode];
     });
@@ -219,10 +240,11 @@ static NSString *const kErrorDomain = @"FHVideoFilterManager Compose Error";
     NSLog(@"failed rendering lossless movie: \"%@\"", errorString);
 }
 
-- (void)encode:(NSNotification *)notification {
-    
-    NSLog(@"haole");
-    NSLog(@"%@",notification);
+- (void)finishedConvert:(NSNotification *)notification {
+    NSLog(@"finished convert lossless movie in : %@",self.converter.outputPath);
+    if ([self.delegate respondsToSelector:@selector(filterManager:doneWithState:error:)]) {
+        [self.delegate filterManager:self doneWithState:FHMediaFilterStateConvertFormatSuccess error:nil];
+    }
 }
 
 

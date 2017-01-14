@@ -12,6 +12,7 @@
 
 + (instancetype)videoComponentWithName:(NSString *)name type:(NSString *)type rect:(CGRect)rect {
     FHMediaComponentVideo *result = [[FHMediaComponentVideo alloc] init];
+    //判断格式自动生成两种通道文件名称。
     if ([type isEqualToString:@"m4v"]) {
         result.alphaVideoName = [NSString stringWithFormat:@"%@_alpha.m4v",name];
         result.rgbVideoName = [NSString stringWithFormat:@"%@_rgb.m4v",name];
@@ -25,16 +26,7 @@
     result.clipRect = rect;
     result.clipSource = [NSString stringWithFormat:@"%@.mvid",name];
     result.clipType = FHMediaComponentTypeVideo;
-//    result.clipScaleFramePerSecond = NO;
-    //clipStartSeconds and clipEndSeconds 默认与该视频长度一致。
     return result;
 }
-
-//- (NSDictionary *)getDic {
-//    NSMutableDictionary *superResult = [[super getDic] mutableCopy];
-//    NSString *newSource = [NSString stringWithFormat:@"%@.mvid",superResult[kKeyClipSource]];
-//    [superResult setObject:newSource forKey:kKeyClipSource];
-//    return superResult;
-//}
 
 @end

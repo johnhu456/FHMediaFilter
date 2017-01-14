@@ -8,6 +8,7 @@
 
 #import "FHMediaComponent.h"
 
+#warning 功能待完善
 @interface FHMediaComponentText : FHMediaComponent
 
 @property (nonatomic, strong) UIFont *font;

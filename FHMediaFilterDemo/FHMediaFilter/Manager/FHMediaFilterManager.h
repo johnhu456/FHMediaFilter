@@ -97,11 +97,13 @@ typedef NS_ENUM(NSUInteger,FHMediaFilterState){
 - (void)addComponent:(FHMediaComponent *)component;
 
 /**
- 开始合成
+ 开始合成，转换格式并输出
  */
-- (void)startFilter;
+- (void)startComposeAndOutput;
 
-#warning test Method
-- (NSDictionary *)getDic;
+/**
+ 输出文件所在位置
+ */
+- (NSString *)outputPath;
 
 @end
