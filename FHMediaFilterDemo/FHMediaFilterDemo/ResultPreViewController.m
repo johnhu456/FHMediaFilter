@@ -82,7 +82,10 @@
 
 - (void)filterManager:(FHMediaFilterManager *)manager doneWithState:(FHMediaFilterState)state error:(NSError *)error {
     if (state == FHMediaFilterStateConvertFormatSuccess) {
-        [self addVideoPlayView];
+        //回主线程播放
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self addVideoPlayView];
+        });
     }
 }
 
