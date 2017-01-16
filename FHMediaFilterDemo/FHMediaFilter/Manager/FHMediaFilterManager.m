@@ -7,13 +7,14 @@
 //
 
 #import "FHMediaFilterManager.h"
+
 #import "AVAssetJoinAlphaResourceLoader.h"
+#import "AVGIF89A2MvidResourceLoader.h"
 #import "AVOfflineComposition.h"
 #import "AVFileUtil.h"
 #import "AVAssetWriterConvertFromMaxvid.h"
 
-#import "FHMediaComponentVideo.h"
-#import "FHMediaComponentImage.h"
+#import "FHMediaComponent.h"
 
 #import "NSMutableDictionary+FHMediaFilterExtension.h"
 
@@ -27,18 +28,29 @@
 
 @implementation FHAnimatorView
 
-- (instancetype)initWithComponents:(FHMediaComponentVideo *)component frame:(CGRect)frame {
+- (instancetype)initWithVideo:(FHMediaComponentVideo *)video frame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        //加载资源
-        AVAssetJoinAlphaResourceLoader *resLoader = [AVAssetJoinAlphaResourceLoader aVAssetJoinAlphaResourceLoader];
-        resLoader.movieRGBFilename = component.rgbVideoName;
-        resLoader.movieAlphaFilename = component.alphaVideoName;
-        resLoader.outPath = [AVFileUtil getTmpDirPath:component.clipSource];
-        resLoader.alwaysGenerateAdler = TRUE;
-        resLoader.serialLoading = TRUE;
         //生成媒体文件
         AVAnimatorMedia *media = [AVAnimatorMedia aVAnimatorMedia];
-        media.resourceLoader = resLoader;
+        //分类合成资源
+        if ([video.alphaVideoName hasSuffix:@"gif"]) {
+            AVGIF89A2MvidResourceLoader *resLoader = [AVGIF89A2MvidResourceLoader aVGIF89A2MvidResourceLoader];
+            resLoader.movieFilename = video.rgbVideoName;
+            resLoader.outPath = [AVFileUtil getTmpDirPath:video.clipSource];
+            resLoader.alwaysGenerateAdler = TRUE;
+            resLoader.serialLoading = TRUE;
+            //关联
+            media.resourceLoader = resLoader;
+        }else {
+            AVAssetJoinAlphaResourceLoader *resLoader = [AVAssetJoinAlphaResourceLoader aVAssetJoinAlphaResourceLoader];
+            resLoader.movieRGBFilename = video.rgbVideoName;
+            resLoader.movieAlphaFilename = video.alphaVideoName;
+            resLoader.outPath = [AVFileUtil getTmpDirPath:video.clipSource];
+            resLoader.alwaysGenerateAdler = TRUE;
+            resLoader.serialLoading = TRUE;
+            //关联
+            media.resourceLoader = resLoader;
+        }
         media.frameDecoder = [AVMvidFrameDecoder aVMvidFrameDecoder];
         _mediaCopy = media;
         //监听播放结束的通知
@@ -217,6 +229,7 @@ static NSString *const kErrorDomain = @"FHVideoFilterManager Compose Error";
     return result;
 }
 
+//合成成功
 - (void)finishedLoadNotification:(NSNotification*)notification
 {
     if ([self.delegate respondsToSelector:@selector(filterManager:doneWithState:error:)]) {
@@ -239,6 +252,7 @@ static NSString *const kErrorDomain = @"FHVideoFilterManager Compose Error";
     });
 }
 
+//合成失败
 - (void)failedToLoadNotification:(NSNotification*)notification
 {
     if ([self.delegate respondsToSelector:@selector(filterManager:doneWithState:error:)]) {
@@ -254,6 +268,7 @@ static NSString *const kErrorDomain = @"FHVideoFilterManager Compose Error";
     NSLog(@"failed rendering lossless movie: \"%@\"", errorString);
 }
 
+//完成转换
 - (void)finishedConvert:(NSNotification *)notification {
     NSLog(@"finished convert lossless movie in : %@",self.converter.outputPath);
     if ([self.delegate respondsToSelector:@selector(filterManager:doneWithState:error:)]) {

@@ -9,10 +9,10 @@
 #import "ViewController.h"
 
 #import "RenderViewController.h"
+#import "GIFDemoViewController.h"
 
 #import "FHMediaFilterManager.h"
-#import "FHMediaComponentVideo.h"
-#import "FHMediaComponentImage.h"
+#import "FHMediaComponent.h"
 
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -35,23 +35,36 @@ static NSString  *const kReuseIdentifier = @"kReuseIdentifier";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 8;
+    return 9;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *imageCell = [tableView dequeueReusableCellWithIdentifier:kReuseIdentifier];
-    if (imageCell == nil) {
-        imageCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kReuseIdentifier];
+    if (indexPath.row < 8) {
+        UITableViewCell *imageCell = [tableView dequeueReusableCellWithIdentifier:kReuseIdentifier];
+        if (imageCell == nil) {
+            imageCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kReuseIdentifier];
+        }
+        imageCell.imageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"%ld",(long)indexPath.row]];
+        imageCell.textLabel.text = nil;
+        return imageCell;
+    }else {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kReuseIdentifier];
+        cell.imageView.image = nil;
+        cell.textLabel.text = @"gif";
+        return cell;
     }
-    imageCell.imageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"%ld",(long)indexPath.row]];
-    return imageCell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *imageName = [NSString stringWithFormat:@"%ld",(long)indexPath.row];
-    RenderViewController *renderViewController = [[RenderViewController alloc] initWithNibName:@"RenderViewController" bundle:nil];
-    renderViewController.imageName = imageName;
-    [self.navigationController pushViewController:renderViewController animated:YES];
+    if (indexPath.row < 8) {
+        NSString *imageName = [NSString stringWithFormat:@"%ld",(long)indexPath.row];
+        RenderViewController *renderViewController = [[RenderViewController alloc] initWithNibName:@"RenderViewController" bundle:nil];
+        renderViewController.imageName = imageName;
+        [self.navigationController pushViewController:renderViewController animated:YES];
+    }else {
+        GIFDemoViewController *gifVC = [[GIFDemoViewController alloc] init];
+        [self.navigationController pushViewController:gifVC animated:YES];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -71,3 +71,51 @@ static NSString *const kKeyClipEndSeconds = @"ClipEndSeconds";
 
 @end
 
+#pragma mark - FHMediaComponentVideo
+@interface FHMediaComponentVideo : FHMediaComponent
+
+/**
+ alpha通道的视频文件名称
+ 如果生成时传入的type为“m4v”，会自动生成名为“name_alpha.m4v”的alphaName
+ */
+@property (nonatomic, strong) NSString *alphaVideoName;
+
+/**
+ rgb通道的视频文件名称
+ 如果生成时传入的type为“m4v”，会自动生成名为“name_rgb.m4v”的alphaName
+ */
+@property (nonatomic, strong) NSString *rgbVideoName;
+
+/**
+ 快捷生成视频组件方法,支持gif
+ 
+ @param name 视频/gif文件名称，视频文件需要存在于App资源包或者/tmp文件夹下
+ @param type 文件类型，目前仅支持m4v/mov/gif
+ @param rect 视频/gif位置及大小
+ @return 视频组件
+ */
++ (instancetype)videoComponentWithName:(NSString *)name type:(NSString *)type rect:(CGRect)rect;
+
+@end
+
+#pragma mark - FHMediaComponentImage
+@interface FHMediaComponentImage : FHMediaComponent
+
+/**
+ 快捷生成图片组件的方法
+ 
+ @param name 图片资源名，图片文件需要存在于App资源包或者/tmp文件夹下
+ @param rect 图片位置及大小
+ */
++ (instancetype)imageComponentWithName:(NSString *)name rect:(CGRect)rect;
+
+@end
+
+#warning 功能待完善
+@interface FHMediaComponentText : FHMediaComponent
+
+@property (nonatomic, strong) UIFont *font;
+@property (nonatomic, assign) CGFloat fontSize;
+@property (nonatomic, strong) UIColor *fontColor;
+
+@end

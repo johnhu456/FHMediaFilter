@@ -114,7 +114,7 @@ static NSString *const kReuseIdentifier = @"kReuseIdentifier";
             [self.imageView.subviews[0] removeFromSuperview];
         }
         FHMediaComponentVideo *video = [FHMediaComponentVideo videoComponentWithName:[NSString stringWithFormat:@"%ld",(long)indexPath.row] type:@"m4v" rect:self.imageView.bounds];
-        FHAnimatorView *view = [[FHAnimatorView alloc] initWithComponents:video frame:self.imageView.bounds];
+        FHAnimatorView *view = [[FHAnimatorView alloc] initWithVideo:video frame:self.imageView.bounds];
         [self.imageView addSubview:view];
         [view startAnimateWithRepeat:YES];
         self.video = video;
@@ -123,7 +123,7 @@ static NSString *const kReuseIdentifier = @"kReuseIdentifier";
             [self.imageView.subviews[0] removeFromSuperview];
         }
         FHMediaComponentVideo *video = [FHMediaComponentVideo videoComponentWithName:[NSString stringWithFormat:@"%ld",(long)indexPath.row] type:@"mov" rect:self.imageView.bounds];
-        FHAnimatorView *view = [[FHAnimatorView alloc] initWithComponents:video frame:self.imageView.bounds];
+        FHAnimatorView *view = [[FHAnimatorView alloc] initWithVideo:video frame:self.imageView.bounds];
         [self.imageView addSubview:view];
         [view startAnimateWithRepeat:YES];
         self.video = video;

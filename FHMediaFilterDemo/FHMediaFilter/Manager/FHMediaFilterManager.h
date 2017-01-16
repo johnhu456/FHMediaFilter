@@ -10,7 +10,6 @@
 #import <UIKit/UIKit.h>
 
 #import "FHMediaComponent.h"
-#import "FHMediaComponentVideo.h"
 
 #import "AVMvidFrameDecoder.h"
 #import "AVFileUtil.h"
@@ -24,13 +23,13 @@
 @interface FHAnimatorView : AVAnimatorView
 
 /**
- 通过视频组件生成FHAnimatorView
+ 通过视频组件生成FHAnimatorView(支持gif展示)
 
- @param component 视频组件
+ @param video 视频组件
  @param frame 大小及位置
  */
-- (instancetype)initWithComponents:(FHMediaComponentVideo *)component
-                                            frame:(CGRect)frame;
+- (instancetype)initWithVideo:(FHMediaComponentVideo *)video
+                        frame:(CGRect)frame;
 
 
 /**

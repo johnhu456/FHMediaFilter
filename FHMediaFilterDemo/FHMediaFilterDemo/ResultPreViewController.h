@@ -8,9 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-#import "FHMediaComponentVideo.h"
+#import "FHMediaComponent.h"
 #import "FHMediaFilterManager.h"
-#import "FHMediaComponentImage.h"
 
 @interface ResultPreViewController : UIViewController
 
