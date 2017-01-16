@@ -29,6 +29,9 @@
 @property (nonatomic, retain) AVAsset2MvidResourceLoader *rgbLoader;
 @property (nonatomic, retain) AVAsset2MvidResourceLoader *alphaLoader;
 
+//FHMediaFilter add
+@property (nonatomic, assign) BOOL syncLoadMark;
+
 + (void) combineRGBAndAlphaPixels:(uint32_t)numPixels
                    combinedPixels:(uint32_t*)combinedPixels
                         rgbPixels:(uint32_t*)rgbPixels
@@ -104,8 +107,12 @@
                   phonyOutPath, outPath,
                   serialLoadingNum, genAdlerNum, nil];
   NSAssert([arr count] == 6, @"arr count");
-  
-  [NSThread detachNewThreadSelector:@selector(decodeThreadEntryPoint:) toTarget:self.class withObject:arr];
+    //FHMediaFilter Add
+    if (self.syncLoadMark) {
+        [self .class decodeThreadEntryPoint:arr];
+    }else {
+        [NSThread detachNewThreadSelector:@selector(decodeThreadEntryPoint:) toTarget:self.class withObject:arr];
+    }
 }
 
 // Define load method here to provide custom implementation that will load
@@ -119,7 +126,6 @@
   // Avoid kicking off mutliple sync load operations. This method should only
   // be invoked from a main thread callback, so there should not be any chance
   // of a race condition involving multiple invocations of this load mehtod.
-  
   if (startedLoading) {
     return;
   } else {
@@ -156,6 +162,13 @@
                  outPath:outPath];
   
   return;
+}
+// FHMediaFilter Add
+- (void)loadWithGroup:(dispatch_queue_t)group {
+    self.syncLoadMark = YES;
+    dispatch_async(group, ^(){
+        [self load];
+    });
 }
 
 - (BOOL) isReady
@@ -563,12 +576,14 @@
     NSLog(@"wrote %@", outPath);
 #endif // LOGGING
   }
-  
+
+      
   if ([serialLoadingNum boolValue]) {
     [self releaseSerialResourceLoaderLock];
   }
   
   }
 }
+
 
 @end

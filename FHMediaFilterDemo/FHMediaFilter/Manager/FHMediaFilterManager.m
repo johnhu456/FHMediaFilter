@@ -91,6 +91,8 @@
  */
 @property (nonatomic, strong) AVAssetWriterConvertFromMaxvid *converter;
 
+@property (nonatomic, strong) dispatch_queue_t joinAlphaQueue;
+
 @end
 
 #pragma mark - KeyNames
@@ -131,19 +133,31 @@ static NSString *const kErrorDomain = @"FHVideoFilterManager Compose Error";
 
 #pragma mark - Public Method
 - (void)startComposeAndOutput {
+    NSMutableArray *videoComponent = [[NSMutableArray alloc] init];
     //将背景视频转换为mvid
     for (FHMediaComponent *component in self.components) {
         if ([component isKindOfClass:[FHMediaComponentVideo class]]){
-            FHMediaComponentVideo *video = (FHMediaComponentVideo *)component;
-            AVAssetJoinAlphaResourceLoader *resLoader = [AVAssetJoinAlphaResourceLoader aVAssetJoinAlphaResourceLoader];
-            resLoader.movieRGBFilename = video.rgbVideoName;
-            resLoader.movieAlphaFilename = video.alphaVideoName;
-            resLoader.outPath = [AVFileUtil getTmpDirPath:[NSString stringWithFormat:@"%@.mvid",component.clipSource]];
-            resLoader.alwaysGenerateAdler = TRUE;
-            resLoader.serialLoading = TRUE;
-            [resLoader load];
+            [videoComponent addObject:component];
         }
     }
+    self.joinAlphaQueue = dispatch_queue_create("my.concurrent.queue", DISPATCH_QUEUE_CONCURRENT);
+    for (FHMediaComponentVideo *video in videoComponent) {
+        AVAssetJoinAlphaResourceLoader *resLoader = [AVAssetJoinAlphaResourceLoader aVAssetJoinAlphaResourceLoader];
+        resLoader.movieRGBFilename = video.rgbVideoName;
+        resLoader.movieAlphaFilename = video.alphaVideoName;
+        resLoader.outPath = [AVFileUtil getTmpDirPath:[NSString stringWithFormat:@"%@",video.clipSource]];
+        resLoader.alwaysGenerateAdler = TRUE;
+        resLoader.serialLoading = TRUE;
+        //同步转换多视频
+        [resLoader loadWithGroup:self.joinAlphaQueue];
+    }
+    dispatch_barrier_async(self.joinAlphaQueue, ^(){
+        //开始合成
+        [self compose];
+    });
+}
+
+- (void)compose {
     AVOfflineComposition *comp = [AVOfflineComposition aVOfflineComposition];
     
 #if defined(HAS_LIB_COMPRESSION_API)
@@ -231,7 +245,7 @@ static NSString *const kErrorDomain = @"FHVideoFilterManager Compose Error";
         AVOfflineComposition *comp = (AVOfflineComposition*)notification.object;
         NSString *errorString = comp.errorString;
         NSError *error = [NSError errorWithDomain:kErrorDomain code:0 userInfo:@{@"info":errorString}];
-        [self.delegate filterManager:self doneWithState:FHMediaFilterStateComposeSuccess error:error];
+        [self.delegate filterManager:self doneWithState:FHMediaFilterStateComposeFailure error:error];
     }
     AVOfflineComposition *comp = (AVOfflineComposition*)notification.object;
     

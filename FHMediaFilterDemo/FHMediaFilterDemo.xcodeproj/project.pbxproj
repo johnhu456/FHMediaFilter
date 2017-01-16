@@ -98,6 +98,8 @@
 		E09D5F2B1E29F7030050EEF4 /* 8_alpha.m4v in Resources */ = {isa = PBXBuildFile; fileRef = E09D5F161E29F1530050EEF4 /* 8_alpha.m4v */; };
 		E09D5F2C1E29F7030050EEF4 /* 8_rgb.m4v in Resources */ = {isa = PBXBuildFile; fileRef = E09D5F171E29F1530050EEF4 /* 8_rgb.m4v */; };
 		E09D5F2F1E2A165B0050EEF4 /* ResultPreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5F2E1E2A165B0050EEF4 /* ResultPreViewController.m */; };
+		E0B799F01E2C6292008E1827 /* 0_mask_alpha.mov in Resources */ = {isa = PBXBuildFile; fileRef = E0B799EE1E2C6292008E1827 /* 0_mask_alpha.mov */; };
+		E0B799F11E2C6292008E1827 /* 0_mask_rgb.mov in Resources */ = {isa = PBXBuildFile; fileRef = E0B799EF1E2C6292008E1827 /* 0_mask_rgb.mov */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -284,6 +286,8 @@
 		E09D5F1A1E29F60E0050EEF4 /* FilterCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterCollectionViewCell.xib; sourceTree = "<group>"; };
 		E09D5F2D1E2A165B0050EEF4 /* ResultPreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultPreViewController.h; sourceTree = "<group>"; };
 		E09D5F2E1E2A165B0050EEF4 /* ResultPreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResultPreViewController.m; sourceTree = "<group>"; };
+		E0B799EE1E2C6292008E1827 /* 0_mask_alpha.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = 0_mask_alpha.mov; sourceTree = "<group>"; };
+		E0B799EF1E2C6292008E1827 /* 0_mask_rgb.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = 0_mask_rgb.mov; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -377,6 +381,8 @@
 				E09D5F161E29F1530050EEF4 /* 8_alpha.m4v */,
 				E09D5F171E29F1530050EEF4 /* 8_rgb.m4v */,
 				E09D5EFE1E29E1A80050EEF4 /* 0.mov */,
+				E0B799EE1E2C6292008E1827 /* 0_mask_alpha.mov */,
+				E0B799EF1E2C6292008E1827 /* 0_mask_rgb.mov */,
 				E09D5DFE1E28BA370050EEF4 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -710,8 +716,10 @@
 				E09D5F1F1E29F7030050EEF4 /* 2_alpha.m4v in Resources */,
 				E09D5F201E29F7030050EEF4 /* 2_rgb.m4v in Resources */,
 				E09D5F211E29F7030050EEF4 /* 3_alpha.m4v in Resources */,
+				E0B799F01E2C6292008E1827 /* 0_mask_alpha.mov in Resources */,
 				E09D5F221E29F7030050EEF4 /* 3_rgb.m4v in Resources */,
 				E09D5F231E29F7030050EEF4 /* 4_alpha.m4v in Resources */,
+				E0B799F11E2C6292008E1827 /* 0_mask_rgb.mov in Resources */,
 				E09D5F241E29F7030050EEF4 /* 4_rgb.m4v in Resources */,
 				E09D5F251E29F7030050EEF4 /* 5_alpha.m4v in Resources */,
 				E09D5F261E29F7030050EEF4 /* 5_rgb.m4v in Resources */,
@@ -1062,6 +1070,7 @@
 				E09D5E291E28BA370050EEF4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E09D5E2A1E28BA370050EEF4 /* Build configuration list for PBXNativeTarget "FHMediaFilterDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -1070,6 +1079,7 @@
 				E09D5E2C1E28BA370050EEF4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E09D5E2D1E28BA370050EEF4 /* Build configuration list for PBXNativeTarget "FHMediaFilterDemoUITests" */ = {
 			isa = XCConfigurationList;
@@ -1078,6 +1088,7 @@
 				E09D5E2F1E28BA370050EEF4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

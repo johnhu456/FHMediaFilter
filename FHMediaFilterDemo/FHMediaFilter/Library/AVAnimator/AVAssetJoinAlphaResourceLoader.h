@@ -50,4 +50,7 @@
 
 + (AVAssetJoinAlphaResourceLoader*) aVAssetJoinAlphaResourceLoader;
 
+// FHMediaFilter Add
+- (void)loadWithGroup:(dispatch_queue_t)group;
+
 @end

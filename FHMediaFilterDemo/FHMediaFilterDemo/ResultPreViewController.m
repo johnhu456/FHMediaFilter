@@ -67,6 +67,13 @@
     filterManager.delegate = self;
     [filterManager addComponent:imageComponent]; //添加图片
     [filterManager addComponent:self.video];  //添加视频
+    
+    FHMediaComponentVideo *maskVideo = [FHMediaComponentVideo videoComponentWithName:@"0_mask" type:@"mov" rect:CGRectMake(0, 0, 375, 300)];
+    maskVideo.alphaVideoName = @"0_mask_alpha.mov";
+    maskVideo.rgbVideoName = @"0_mask_rgb.mov";
+    maskVideo.clipEndSeconds = 3.f;
+    [filterManager addComponent:maskVideo];
+    
     filterManager.about = @"Comp 2 videos text at full screen 2x size with subtitles"; //没什么用
     filterManager.destination = @"result";  //输出文件名
     filterManager.source = @"Comp.plist"; //没什么用

@@ -20,7 +20,8 @@
         result.alphaVideoName = [NSString stringWithFormat:@"%@.mov",name];
         result.rgbVideoName = [NSString stringWithFormat:@"%@.mov",name];
     }else {
-        [NSException exceptionWithName:@"Unsupport Type" reason:@"FHMediaComponentVideo now can only support type m4v or mov video with alpha chanel" userInfo:nil];
+        [NSException exceptionWithName:@"Unsupport Type" reason:@"FHMediaComponentVideo now can only support type m4v or mov video"
+                              userInfo:nil];
         return nil;
     }
     result.clipRect = rect;
