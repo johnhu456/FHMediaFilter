@@ -59,12 +59,15 @@
     }else if ([type isEqualToString:@"mov"]) {
         result.alphaVideoName = [NSString stringWithFormat:@"%@.mov",name];
         result.rgbVideoName = [NSString stringWithFormat:@"%@.mov",name];
+    }else if ([type isEqualToString:@"mp4"]) {
+        result.alphaVideoName = [NSString stringWithFormat:@"%@.mp4",name];
+        result.rgbVideoName = [NSString stringWithFormat:@"%@.mp4",name];
     }else if ([type isEqualToString:@"gif"]) {
         result.alphaVideoName = [NSString stringWithFormat:@"%@.gif",name];
         result.rgbVideoName = [NSString stringWithFormat:@"%@.gif",name];
     }else {
-        [NSException exceptionWithName:@"Unsupport Type" reason:@"FHMediaComponentVideo now can only support type m4v or mov video"
-                              userInfo:nil];
+        [[NSException exceptionWithName:@"Unsupport Type" reason:@"FHMediaComponentVideo now can only support type m4v/mp4/mov video or gif"
+                              userInfo:nil] raise];
         return nil;
     }
     result.clipRect = rect;

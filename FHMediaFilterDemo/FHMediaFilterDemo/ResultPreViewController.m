@@ -63,16 +63,21 @@
     imageComponent.clipEndSeconds = 3.f;
     self.video.clipEndSeconds = 3.f;
     self.video.clipRect = CGRectMake(0, 0, 375, 300);
+    
+    
     FHMediaFilterManager *filterManager = [[FHMediaFilterManager alloc] init];
     filterManager.delegate = self;
     [filterManager addComponent:imageComponent]; //添加图片
     [filterManager addComponent:self.video];  //添加视频
     
-    FHMediaComponentVideo *maskVideo = [FHMediaComponentVideo videoComponentWithName:@"0_mask" type:@"mov" rect:CGRectMake(0, 0, 375, 300)];
-    maskVideo.alphaVideoName = @"0_mask_alpha.mov";
-    maskVideo.rgbVideoName = @"0_mask_rgb.mov";
-    maskVideo.clipEndSeconds = 3.f;
-    [filterManager addComponent:maskVideo];
+//    FHMediaComponentVideo *maskVideo = [FHMediaComponentVideo videoComponentWithName:@"0_mask" type:@"mov" rect:CGRectMake(0, 0, 375, 300)];
+//    maskVideo.alphaVideoName = @"0_mask_alpha.mov";
+//    maskVideo.rgbVideoName = @"0_mask_rgb.mov";
+//    maskVideo.clipEndSeconds = 3.f;
+//    [filterManager addComponent:maskVideo];
+//    FHMediaComponentImage *icon = [FHMediaComponentImage imageComponentWithName:@"LOGO@2x" rect:CGRectMake(330, 250, 30, 30)];
+//    icon.clipEndSeconds = 3.f;
+//    [filterManager addComponent:icon];
     
     filterManager.about = @"Comp 2 videos text at full screen 2x size with subtitles"; //没什么用
     filterManager.destination = @"result";  //输出文件名

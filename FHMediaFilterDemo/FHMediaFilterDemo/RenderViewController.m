@@ -57,9 +57,12 @@ static NSString *const kReuseIdentifier = @"kReuseIdentifier";
 
 #pragma mark - Get Image
 - (void)getVideoThumbnailImages {
-    NSString *snowURL = [[NSBundle mainBundle] pathForResource:@"0" ofType:@"mov"];
+    NSString *snowURL = [[NSBundle mainBundle] pathForResource:@"filter_test01" ofType:@"mp4"];
+    NSString *snow2URL = [[NSBundle mainBundle] pathForResource:@"filter_test02" ofType:@"mp4"];
     [self.videoThumbnails addObject:[self thumbnailImageForVideo:[NSURL fileURLWithPath:snowURL] atTime:1]];
-    for (int i = 1; i< 8; i ++) {
+    [self.videoThumbnails addObject:[self thumbnailImageForVideo:[NSURL fileURLWithPath:snow2URL] atTime:1]];
+    
+    for (int i = 2; i< 8; i ++) {
         NSString *videoURL = [[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"%d_rgb",i] ofType:@"m4v"];
         [self.videoThumbnails addObject:[self thumbnailImageForVideo:[NSURL fileURLWithPath:videoURL] atTime:1]];
     }
@@ -109,7 +112,7 @@ static NSString *const kReuseIdentifier = @"kReuseIdentifier";
     //滤镜展示合成
     
     //添加滤镜展示View
-    if (indexPath.row != 0) {
+    if (indexPath.row > 1) {
         while (self.imageView.subviews.count) {
             [self.imageView.subviews[0] removeFromSuperview];
         }
@@ -118,11 +121,20 @@ static NSString *const kReuseIdentifier = @"kReuseIdentifier";
         [self.imageView addSubview:view];
         [view startAnimateWithRepeat:YES];
         self.video = video;
-    }else {
+    }else if (indexPath.row == 0){
         while (self.imageView.subviews.count) {
             [self.imageView.subviews[0] removeFromSuperview];
         }
-        FHMediaComponentVideo *video = [FHMediaComponentVideo videoComponentWithName:[NSString stringWithFormat:@"%ld",(long)indexPath.row] type:@"mov" rect:self.imageView.bounds];
+        FHMediaComponentVideo *video = [FHMediaComponentVideo videoComponentWithName:@"filter_test01" type:@"mp4" rect:self.imageView.bounds];
+        FHAnimatorView *view = [[FHAnimatorView alloc] initWithVideo:video frame:self.imageView.bounds];
+        [self.imageView addSubview:view];
+        [view startAnimateWithRepeat:YES];
+        self.video = video;
+    }else if (indexPath.row == 1) {
+        while (self.imageView.subviews.count) {
+            [self.imageView.subviews[0] removeFromSuperview];
+        }
+        FHMediaComponentVideo *video = [FHMediaComponentVideo videoComponentWithName:@"filter_test02" type:@"mp4" rect:self.imageView.bounds];
         FHAnimatorView *view = [[FHAnimatorView alloc] initWithVideo:video frame:self.imageView.bounds];
         [self.imageView addSubview:view];
         [view startAnimateWithRepeat:YES];
