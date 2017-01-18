@@ -53,7 +53,10 @@
 + (instancetype)videoComponentWithName:(NSString *)name type:(NSString *)type rect:(CGRect)rect {
     FHMediaComponentVideo *result = [[FHMediaComponentVideo alloc] init];
     //判断格式自动生成两种通道文件名称。
-    if ([type isEqualToString:@"m4v"]) {
+    if ([name hasPrefix:@"/"]){
+        result.alphaVideoName = [NSString stringWithFormat:@"%@",name];
+        result.rgbVideoName = [NSString stringWithFormat:@"%@",name];
+    }else if ([type isEqualToString:@"m4v"]) {
         result.alphaVideoName = [NSString stringWithFormat:@"%@_alpha.m4v",name];
         result.rgbVideoName = [NSString stringWithFormat:@"%@_rgb.m4v",name];
     }else if ([type isEqualToString:@"mov"]) {
@@ -65,13 +68,17 @@
     }else if ([type isEqualToString:@"gif"]) {
         result.alphaVideoName = [NSString stringWithFormat:@"%@.gif",name];
         result.rgbVideoName = [NSString stringWithFormat:@"%@.gif",name];
-    }else {
+    }else{
         [[NSException exceptionWithName:@"Unsupport Type" reason:@"FHMediaComponentVideo now can only support type m4v/mp4/mov video or gif"
                               userInfo:nil] raise];
         return nil;
     }
     result.clipRect = rect;
-    result.clipSource = [NSString stringWithFormat:@"%@.mvid",name];
+    if ([name hasPrefix:@"/"]) {
+        result.clipSource = [NSString stringWithFormat:@"%@.mvid",[[name lastPathComponent] stringByDeletingPathExtension]];
+    }else {
+        result.clipSource = [NSString stringWithFormat:@"%@.mvid",name];
+    }
     result.clipType = FHMediaComponentTypeVideo;
     return result;
 }
