@@ -9,13 +9,15 @@
 #import "RenderViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
+#import <SSZipArchive.h>
 
 #import "ResultPreViewController.h"
 #import "FHMediaFilterManager.h"
+#import "FHFilterFileManager.h"
 
 #import "FilterCollectionViewCell.h"
 
-@interface RenderViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
+@interface RenderViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,SSZipArchiveDelegate,FHFilterFileManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
@@ -134,12 +136,31 @@ static NSString *const kReuseIdentifier = @"kReuseIdentifier";
         while (self.imageView.subviews.count) {
             [self.imageView.subviews[0] removeFromSuperview];
         }
-        FHMediaComponentVideo *video = [FHMediaComponentVideo videoComponentWithName:@"filter_test02" type:@"mp4" rect:self.imageView.bounds];
-        FHAnimatorView *view = [[FHAnimatorView alloc] initWithVideo:video frame:self.imageView.bounds];
-        [self.imageView addSubview:view];
-        [view startAnimateWithRepeat:YES];
+        
+        
+        
+        NSString *local = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"filter_test02copy.mp4"];
+        NSString *mvidLocal = [[local stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"test.zip"];
+//        FHMediaComponentVideo *video = [FHMediaComponentVideo videoComponentWithName:local type:@"mp4" rect:self.imageView.bounds];
+         FHMediaComponentVideo *video = [FHMediaComponentVideo videoComponentWithName:@"filter_test01" type:@"mp4" rect:self.imageView.bounds];
+        [FHFilterFileManager sharedManager].delegate = self;
+        video.clipSource = @"test.mvid";
         self.video = video;
+        [[FHFilterFileManager sharedManager] checkMVIDFileWithMP4Path:local zipOutpath:mvidLocal rect:CGRectMake(0, 0, 400, 300)];
+
     }
+}
+
+- (void)checkMVIDFileDoneWithExist:(BOOL)exist mvidPath:(NSString *)mvidPath {
+    NSLog(@"%@",exist?@"YES" : @"NO");
+    NSLog(@"%@",mvidPath);
+    FHAnimatorView *view = [[FHAnimatorView alloc] initWithVideo:self.video frame:self.imageView.bounds];
+    [self.imageView addSubview:view];
+    [view startAnimateWithRepeat:YES];
+}
+
+- (void)zipArchiveDidUnzipArchiveAtPath:(NSString *)path zipInfo:(unz_global_info)zipInfo unzippedPath:(NSString *)unzippedPath {
+
 }
 
 - (void)didReceiveMemoryWarning {

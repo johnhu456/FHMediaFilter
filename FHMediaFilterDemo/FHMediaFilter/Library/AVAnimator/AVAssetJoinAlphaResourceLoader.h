@@ -28,6 +28,7 @@
   BOOL startedLoading;
 }
 
+
 // The name of the RGB portion of the movie should be saved in the
 // "movieRGBFilename" property.
 

@@ -9,6 +9,8 @@
 #import "ResultPreViewController.h"
 #import <AVFoundation/AVFoundation.h>
 
+#import <SSZipArchive.h>
+
 @interface ResultPreViewController ()<FHMediaFilterManagerDelegate>
 
 @property (nonatomic, strong) FHMediaFilterManager *filterManager;
@@ -98,6 +100,8 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [self addVideoPlayView];
         });
+        //压缩
+        [SSZipArchive createZipFileAtPath:[NSString stringWithFormat:@"%@.zip",self.filterManager.outputPath] withFilesAtPaths:@[self.filterManager.outputPath]];
     }
 }
 

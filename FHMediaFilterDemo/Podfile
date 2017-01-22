@@ -1,0 +1,18 @@
+source "https://github.com/CocoaPods/Old-Specs"
+# Uncomment this line to define a global platform for your project
+# platform :ios, '8.0'
+# Uncomment this line if you're using Swift
+# use_frameworks!
+
+target 'FHMediaFilterDemo' do
+    pod 'SSZipArchive'
+end
+
+target 'FHMediaFilterDemoTests' do
+
+end
+
+target 'FHMediaFilterDemoUITests' do
+
+end
+

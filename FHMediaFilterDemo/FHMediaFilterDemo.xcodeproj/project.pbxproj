@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		496F5AEF039C38EBB2BEBDBF /* libPods-FHMediaFilterDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 41065AA9B4B9104933E9E302 /* libPods-FHMediaFilterDemo.a */; };
+		E04242F61E30A68A008B978D /* FHFilterFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E04242F51E30A68A008B978D /* FHFilterFileManager.m */; };
 		E09D5DFF1E28BA370050EEF4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5DFE1E28BA370050EEF4 /* main.m */; };
 		E09D5E021E28BA370050EEF4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E011E28BA370050EEF4 /* AppDelegate.m */; };
 		E09D5E051E28BA370050EEF4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E041E28BA370050EEF4 /* ViewController.m */; };
@@ -123,6 +125,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1EEE7359B3C43A547BBEE782 /* Pods-FHMediaFilterDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FHMediaFilterDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-FHMediaFilterDemo/Pods-FHMediaFilterDemo.release.xcconfig"; sourceTree = "<group>"; };
+		41065AA9B4B9104933E9E302 /* libPods-FHMediaFilterDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FHMediaFilterDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E1AFC8E3E107EA32888E8D5 /* Pods-FHMediaFilterDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FHMediaFilterDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FHMediaFilterDemo/Pods-FHMediaFilterDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		E04242F41E30A68A008B978D /* FHFilterFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHFilterFileManager.h; sourceTree = "<group>"; };
+		E04242F51E30A68A008B978D /* FHFilterFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHFilterFileManager.m; sourceTree = "<group>"; };
 		E09D5DFA1E28BA370050EEF4 /* FHMediaFilterDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FHMediaFilterDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E09D5DFE1E28BA370050EEF4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E09D5E001E28BA370050EEF4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -300,6 +307,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E09D5EE91E28CB670050EEF4 /* libz.tbd in Frameworks */,
+				496F5AEF039C38EBB2BEBDBF /* libPods-FHMediaFilterDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,6 +328,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		573802B63D817C31E4C69B2D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				41065AA9B4B9104933E9E302 /* libPods-FHMediaFilterDemo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		88AE65EE6BD84D97560A1C87 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4E1AFC8E3E107EA32888E8D5 /* Pods-FHMediaFilterDemo.debug.xcconfig */,
+				1EEE7359B3C43A547BBEE782 /* Pods-FHMediaFilterDemo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		E09D5DF11E28BA370050EEF4 = {
 			isa = PBXGroup;
 			children = (
@@ -328,6 +353,8 @@
 				E09D5E161E28BA370050EEF4 /* FHMediaFilterDemoTests */,
 				E09D5E211E28BA370050EEF4 /* FHMediaFilterDemoUITests */,
 				E09D5DFB1E28BA370050EEF4 /* Products */,
+				88AE65EE6BD84D97560A1C87 /* Pods */,
+				573802B63D817C31E4C69B2D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -415,6 +442,8 @@
 			children = (
 				E09D5E351E28BA8A0050EEF4 /* FHMediaFilterManager.h */,
 				E09D5E361E28BA8A0050EEF4 /* FHMediaFilterManager.m */,
+				E04242F41E30A68A008B978D /* FHFilterFileManager.h */,
+				E04242F51E30A68A008B978D /* FHFilterFileManager.m */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -638,9 +667,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E09D5E271E28BA370050EEF4 /* Build configuration list for PBXNativeTarget "FHMediaFilterDemo" */;
 			buildPhases = (
+				E92BA1A7430998AA277C3598 /* Check Pods Manifest.lock */,
 				E09D5DF61E28BA370050EEF4 /* Sources */,
 				E09D5DF71E28BA370050EEF4 /* Frameworks */,
 				E09D5DF81E28BA370050EEF4 /* Resources */,
+				36E268EE3C9E66EA7FC922D0 /* Embed Pods Frameworks */,
+				4027F1D068E05D25850BDD9B /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -788,6 +820,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		36E268EE3C9E66EA7FC922D0 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FHMediaFilterDemo/Pods-FHMediaFilterDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4027F1D068E05D25850BDD9B /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FHMediaFilterDemo/Pods-FHMediaFilterDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E92BA1A7430998AA277C3598 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		E09D5DF61E28BA370050EEF4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -842,6 +922,7 @@
 				E09D5E021E28BA370050EEF4 /* AppDelegate.m in Sources */,
 				E09D5EE31E28CB670050EEF4 /* maxvid_deltas.m in Sources */,
 				E09D5ED51E28CB670050EEF4 /* AVFileUtil.m in Sources */,
+				E04242F61E30A68A008B978D /* FHFilterFileManager.m in Sources */,
 				E09D5EE81E28CB670050EEF4 /* SegmentedMappedData.m in Sources */,
 				E09D5EE51E28CB670050EEF4 /* maxvid_file.c in Sources */,
 				E09D5EDC1E28CB670050EEF4 /* AVOfflineComposition.m in Sources */,
@@ -1003,6 +1084,7 @@
 		};
 		E09D5E281E28BA370050EEF4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4E1AFC8E3E107EA32888E8D5 /* Pods-FHMediaFilterDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = H3MEX3W3VV;
@@ -1020,6 +1102,7 @@
 		};
 		E09D5E291E28BA370050EEF4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1EEE7359B3C43A547BBEE782 /* Pods-FHMediaFilterDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = H3MEX3W3VV;
