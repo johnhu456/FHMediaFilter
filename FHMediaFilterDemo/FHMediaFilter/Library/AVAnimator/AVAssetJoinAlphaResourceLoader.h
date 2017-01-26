@@ -17,17 +17,20 @@
 
 #import "AVAppResourceLoader.h"
 
+#import "AVAssetConvertCommon.h"
+
 @interface AVAssetJoinAlphaResourceLoader : AVAppResourceLoader
 {
   NSString *m_movieRGBFilename;
   NSString *m_movieAlphaFilename;
   NSString *m_outPath;
-  AVAsset2MvidResourceLoader *m_rgbLoader;
-  AVAsset2MvidResourceLoader *m_alphaLoader;
   BOOL m_alwaysGenerateAdler;
   BOOL startedLoading;
+  
+#if defined(HAS_LIB_COMPRESSION_API)
+  BOOL m_compressed;
+#endif // HAS_LIB_COMPRESSION_API
 }
-
 
 // The name of the RGB portion of the movie should be saved in the
 // "movieRGBFilename" property.
@@ -47,9 +50,16 @@
 
 @property (nonatomic, assign) BOOL alwaysGenerateAdler;
 
+// Set this property to TRUE to enable compression of each keyframe
+
+#if defined(HAS_LIB_COMPRESSION_API)
+@property (nonatomic, assign) BOOL compressed;
+#endif // HAS_LIB_COMPRESSION_API
+
 // constructor
 
 + (AVAssetJoinAlphaResourceLoader*) aVAssetJoinAlphaResourceLoader;
+
 
 // FHMediaFilter Add
 - (void)loadWithGroup:(dispatch_queue_t)group;

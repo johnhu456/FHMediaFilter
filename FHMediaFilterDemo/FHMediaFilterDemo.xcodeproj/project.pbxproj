@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		496F5AEF039C38EBB2BEBDBF /* libPods-FHMediaFilterDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 41065AA9B4B9104933E9E302 /* libPods-FHMediaFilterDemo.a */; };
 		E04242F61E30A68A008B978D /* FHFilterFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E04242F51E30A68A008B978D /* FHFilterFileManager.m */; };
+		E081E3B21E39A4CD0099C670 /* AV7zAppResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = E081E3B11E39A4CD0099C670 /* AV7zAppResourceLoader.m */; };
+		E081E3B51E39A4F50099C670 /* AVAssetJoinAlphaResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = E081E3B41E39A4F50099C670 /* AVAssetJoinAlphaResourceLoader.m */; };
 		E09D5DFF1E28BA370050EEF4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5DFE1E28BA370050EEF4 /* main.m */; };
 		E09D5E021E28BA370050EEF4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E011E28BA370050EEF4 /* AppDelegate.m */; };
 		E09D5E051E28BA370050EEF4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E041E28BA370050EEF4 /* ViewController.m */; };
@@ -22,7 +24,6 @@
 		E09D5E3E1E28BCB90050EEF4 /* NSMutableDictionary+FHMediaFilterExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E3D1E28BCB90050EEF4 /* NSMutableDictionary+FHMediaFilterExtension.m */; };
 		E09D5EC51E28CB670050EEF4 /* ApngConvertMaxvid.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E521E28CB660050EEF4 /* ApngConvertMaxvid.m */; };
 		E09D5EC61E28CB670050EEF4 /* AV7zApng2MvidResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E541E28CB660050EEF4 /* AV7zApng2MvidResourceLoader.m */; };
-		E09D5EC71E28CB670050EEF4 /* AV7zAppResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E561E28CB660050EEF4 /* AV7zAppResourceLoader.m */; };
 		E09D5EC81E28CB670050EEF4 /* AVAnimatorH264AlphaPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E581E28CB660050EEF4 /* AVAnimatorH264AlphaPlayer.m */; };
 		E09D5EC91E28CB670050EEF4 /* AVAnimatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E5A1E28CB660050EEF4 /* AVAnimatorLayer.m */; };
 		E09D5ECA1E28CB670050EEF4 /* AVAnimatorMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E5D1E28CB660050EEF4 /* AVAnimatorMedia.m */; };
@@ -32,7 +33,6 @@
 		E09D5ECE1E28CB670050EEF4 /* AVAppResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E691E28CB660050EEF4 /* AVAppResourceLoader.m */; };
 		E09D5ECF1E28CB670050EEF4 /* AVAsset2MvidResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E6B1E28CB660050EEF4 /* AVAsset2MvidResourceLoader.m */; };
 		E09D5ED01E28CB670050EEF4 /* AVAssetFrameDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E6E1E28CB660050EEF4 /* AVAssetFrameDecoder.m */; };
-		E09D5ED11E28CB670050EEF4 /* AVAssetJoinAlphaResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E701E28CB660050EEF4 /* AVAssetJoinAlphaResourceLoader.m */; };
 		E09D5ED21E28CB670050EEF4 /* AVAssetMixAlphaResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E721E28CB660050EEF4 /* AVAssetMixAlphaResourceLoader.m */; };
 		E09D5ED31E28CB670050EEF4 /* AVAssetReaderConvertMaxvid.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E741E28CB660050EEF4 /* AVAssetReaderConvertMaxvid.m */; };
 		E09D5ED41E28CB670050EEF4 /* AVAssetWriterConvertFromMaxvid.m in Sources */ = {isa = PBXBuildFile; fileRef = E09D5E761E28CB660050EEF4 /* AVAssetWriterConvertFromMaxvid.m */; };
@@ -130,6 +130,10 @@
 		4E1AFC8E3E107EA32888E8D5 /* Pods-FHMediaFilterDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FHMediaFilterDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FHMediaFilterDemo/Pods-FHMediaFilterDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		E04242F41E30A68A008B978D /* FHFilterFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHFilterFileManager.h; sourceTree = "<group>"; };
 		E04242F51E30A68A008B978D /* FHFilterFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHFilterFileManager.m; sourceTree = "<group>"; };
+		E081E3B01E39A4CD0099C670 /* AV7zAppResourceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AV7zAppResourceLoader.h; sourceTree = "<group>"; };
+		E081E3B11E39A4CD0099C670 /* AV7zAppResourceLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AV7zAppResourceLoader.m; sourceTree = "<group>"; };
+		E081E3B31E39A4F50099C670 /* AVAssetJoinAlphaResourceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAssetJoinAlphaResourceLoader.h; sourceTree = "<group>"; };
+		E081E3B41E39A4F50099C670 /* AVAssetJoinAlphaResourceLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVAssetJoinAlphaResourceLoader.m; sourceTree = "<group>"; };
 		E09D5DFA1E28BA370050EEF4 /* FHMediaFilterDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FHMediaFilterDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E09D5DFE1E28BA370050EEF4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E09D5E001E28BA370050EEF4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -156,8 +160,6 @@
 		E09D5E521E28CB660050EEF4 /* ApngConvertMaxvid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApngConvertMaxvid.m; sourceTree = "<group>"; };
 		E09D5E531E28CB660050EEF4 /* AV7zApng2MvidResourceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AV7zApng2MvidResourceLoader.h; sourceTree = "<group>"; };
 		E09D5E541E28CB660050EEF4 /* AV7zApng2MvidResourceLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AV7zApng2MvidResourceLoader.m; sourceTree = "<group>"; };
-		E09D5E551E28CB660050EEF4 /* AV7zAppResourceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AV7zAppResourceLoader.h; sourceTree = "<group>"; };
-		E09D5E561E28CB660050EEF4 /* AV7zAppResourceLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AV7zAppResourceLoader.m; sourceTree = "<group>"; };
 		E09D5E571E28CB660050EEF4 /* AVAnimatorH264AlphaPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAnimatorH264AlphaPlayer.h; sourceTree = "<group>"; };
 		E09D5E581E28CB660050EEF4 /* AVAnimatorH264AlphaPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVAnimatorH264AlphaPlayer.m; sourceTree = "<group>"; };
 		E09D5E591E28CB660050EEF4 /* AVAnimatorLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAnimatorLayer.h; sourceTree = "<group>"; };
@@ -182,8 +184,6 @@
 		E09D5E6C1E28CB660050EEF4 /* AVAssetConvertCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAssetConvertCommon.h; sourceTree = "<group>"; };
 		E09D5E6D1E28CB660050EEF4 /* AVAssetFrameDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAssetFrameDecoder.h; sourceTree = "<group>"; };
 		E09D5E6E1E28CB660050EEF4 /* AVAssetFrameDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVAssetFrameDecoder.m; sourceTree = "<group>"; };
-		E09D5E6F1E28CB660050EEF4 /* AVAssetJoinAlphaResourceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAssetJoinAlphaResourceLoader.h; sourceTree = "<group>"; };
-		E09D5E701E28CB660050EEF4 /* AVAssetJoinAlphaResourceLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVAssetJoinAlphaResourceLoader.m; sourceTree = "<group>"; };
 		E09D5E711E28CB660050EEF4 /* AVAssetMixAlphaResourceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAssetMixAlphaResourceLoader.h; sourceTree = "<group>"; };
 		E09D5E721E28CB660050EEF4 /* AVAssetMixAlphaResourceLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVAssetMixAlphaResourceLoader.m; sourceTree = "<group>"; };
 		E09D5E731E28CB660050EEF4 /* AVAssetReaderConvertMaxvid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAssetReaderConvertMaxvid.h; sourceTree = "<group>"; };
@@ -483,8 +483,8 @@
 				E09D5E521E28CB660050EEF4 /* ApngConvertMaxvid.m */,
 				E09D5E531E28CB660050EEF4 /* AV7zApng2MvidResourceLoader.h */,
 				E09D5E541E28CB660050EEF4 /* AV7zApng2MvidResourceLoader.m */,
-				E09D5E551E28CB660050EEF4 /* AV7zAppResourceLoader.h */,
-				E09D5E561E28CB660050EEF4 /* AV7zAppResourceLoader.m */,
+				E081E3B01E39A4CD0099C670 /* AV7zAppResourceLoader.h */,
+				E081E3B11E39A4CD0099C670 /* AV7zAppResourceLoader.m */,
 				E09D5E571E28CB660050EEF4 /* AVAnimatorH264AlphaPlayer.h */,
 				E09D5E581E28CB660050EEF4 /* AVAnimatorH264AlphaPlayer.m */,
 				E09D5E591E28CB660050EEF4 /* AVAnimatorLayer.h */,
@@ -500,6 +500,8 @@
 				E09D5E631E28CB660050EEF4 /* AVAnimatorView.h */,
 				E09D5E641E28CB660050EEF4 /* AVAnimatorView.m */,
 				E09D5E651E28CB660050EEF4 /* AVAnimatorViewPrivate.h */,
+				E081E3B31E39A4F50099C670 /* AVAssetJoinAlphaResourceLoader.h */,
+				E081E3B41E39A4F50099C670 /* AVAssetJoinAlphaResourceLoader.m */,
 				E09D5E661E28CB660050EEF4 /* AVApng2MvidResourceLoader.h */,
 				E09D5E671E28CB660050EEF4 /* AVApng2MvidResourceLoader.m */,
 				E09D5E681E28CB660050EEF4 /* AVAppResourceLoader.h */,
@@ -509,8 +511,6 @@
 				E09D5E6C1E28CB660050EEF4 /* AVAssetConvertCommon.h */,
 				E09D5E6D1E28CB660050EEF4 /* AVAssetFrameDecoder.h */,
 				E09D5E6E1E28CB660050EEF4 /* AVAssetFrameDecoder.m */,
-				E09D5E6F1E28CB660050EEF4 /* AVAssetJoinAlphaResourceLoader.h */,
-				E09D5E701E28CB660050EEF4 /* AVAssetJoinAlphaResourceLoader.m */,
 				E09D5E711E28CB660050EEF4 /* AVAssetMixAlphaResourceLoader.h */,
 				E09D5E721E28CB660050EEF4 /* AVAssetMixAlphaResourceLoader.m */,
 				E09D5E731E28CB660050EEF4 /* AVAssetReaderConvertMaxvid.h */,
@@ -877,20 +877,20 @@
 				E09D5E371E28BA8A0050EEF4 /* FHMediaFilterManager.m in Sources */,
 				E09D5ECE1E28CB670050EEF4 /* AVAppResourceLoader.m in Sources */,
 				E09D5EF91E28CB670050EEF4 /* Ppmd8Dec.c in Sources */,
-				E09D5ED11E28CB670050EEF4 /* AVAssetJoinAlphaResourceLoader.m in Sources */,
 				E09D5ED31E28CB670050EEF4 /* AVAssetReaderConvertMaxvid.m in Sources */,
 				E09D5EEE1E28CB670050EEF4 /* 7zIn.c in Sources */,
 				E09D5ED01E28CB670050EEF4 /* AVAssetFrameDecoder.m in Sources */,
 				E09D5EDF1E28CB670050EEF4 /* CGFrameBuffer.m in Sources */,
 				E09D5E3E1E28BCB90050EEF4 /* NSMutableDictionary+FHMediaFilterExtension.m in Sources */,
 				E09D5EE61E28CB670050EEF4 /* movdata.c in Sources */,
+				E081E3B51E39A4F50099C670 /* AVAssetJoinAlphaResourceLoader.m in Sources */,
 				E09D5ECF1E28CB670050EEF4 /* AVAsset2MvidResourceLoader.m in Sources */,
 				E09D5EDE1E28CB670050EEF4 /* AVStreamEncodeDecode.m in Sources */,
 				E09D5ED41E28CB670050EEF4 /* AVAssetWriterConvertFromMaxvid.m in Sources */,
 				E09D5EEF1E28CB670050EEF4 /* 7zStream.c in Sources */,
+				E081E3B21E39A4CD0099C670 /* AV7zAppResourceLoader.m in Sources */,
 				E09D5ED81E28CB670050EEF4 /* AVGIF89A2MvidResourceLoader.m in Sources */,
 				E09D5F061E29EA2A0050EEF4 /* RenderViewController.m in Sources */,
-				E09D5EC71E28CB670050EEF4 /* AV7zAppResourceLoader.m in Sources */,
 				E09D5ED61E28CB670050EEF4 /* AVFrame.m in Sources */,
 				E09D5EFA1E28CB670050EEF4 /* 7zAlloc.c in Sources */,
 				E09D5ED91E28CB670050EEF4 /* AVImageFrameDecoder.m in Sources */,

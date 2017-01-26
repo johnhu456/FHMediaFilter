@@ -22,20 +22,19 @@
 
 #import "movdata.h"
 
+#include "AVStreamEncodeDecode.h"
+
 //#define LOGGING
 
 @interface AVAssetJoinAlphaResourceLoader ()
-
-@property (nonatomic, retain) AVAsset2MvidResourceLoader *rgbLoader;
-@property (nonatomic, retain) AVAsset2MvidResourceLoader *alphaLoader;
-
-//FHMediaFilter add
-@property (nonatomic, assign) BOOL syncLoadMark;
 
 + (void) combineRGBAndAlphaPixels:(uint32_t)numPixels
                    combinedPixels:(uint32_t*)combinedPixels
                         rgbPixels:(uint32_t*)rgbPixels
                       alphaPixels:(uint32_t*)alphaPixels;
+
+//FHMediaFilter add
+@property (nonatomic, assign) BOOL syncLoadMark;
 
 @end
 
@@ -45,8 +44,10 @@
 @synthesize movieAlphaFilename = m_movieAlphaFilename;
 @synthesize outPath = m_outPath;
 @synthesize alwaysGenerateAdler = m_alwaysGenerateAdler;
-@synthesize rgbLoader = m_rgbLoader;
-@synthesize alphaLoader = m_alphaLoader;
+
+#if defined(HAS_LIB_COMPRESSION_API)
+@synthesize compressed = m_compressed;
+#endif // HAS_LIB_COMPRESSION_API
 
 + (AVAssetJoinAlphaResourceLoader*) aVAssetJoinAlphaResourceLoader
 {
@@ -63,8 +64,6 @@
   self.movieRGBFilename = nil;
   self.movieAlphaFilename = nil;
   self.outPath = nil;
-  self.rgbLoader = nil;
-  self.alphaLoader = nil;
   
 #if __has_feature(objc_arc)
 #else
@@ -95,6 +94,7 @@
            alphaAssetPath:(NSString*)alphaAssetPath
              phonyOutPath:(NSString*)phonyOutPath
                   outPath:(NSString*)outPath
+             isCompressed:(BOOL)isCompressed
 {
   NSNumber *serialLoadingNum = [NSNumber numberWithBool:self.serialLoading];
   
@@ -105,8 +105,10 @@
   NSArray *arr = [NSArray arrayWithObjects:rgbAssetPath,
                   alphaAssetPath,
                   phonyOutPath, outPath,
-                  serialLoadingNum, genAdlerNum, nil];
-  NSAssert([arr count] == 6, @"arr count");
+                  serialLoadingNum,
+                  genAdlerNum,
+                  @(isCompressed), nil];
+  NSAssert([arr count] == 7, @"arr count");
     //FHMediaFilter Add
     if (self.syncLoadMark) {
         [self .class decodeThreadEntryPoint:arr];
@@ -126,6 +128,7 @@
   // Avoid kicking off mutliple sync load operations. This method should only
   // be invoked from a main thread callback, so there should not be any chance
   // of a race condition involving multiple invocations of this load mehtod.
+  
   if (startedLoading) {
     return;
   } else {
@@ -145,6 +148,11 @@
   NSString *qualAlphaPath = [AVFileUtil getQualifiedFilenameOrResource:self.movieAlphaFilename];
   NSAssert(qualAlphaPath, @"qualAlphaPath");
   
+  BOOL isCompressed = FALSE;
+#if defined(HAS_LIB_COMPRESSION_API)
+  isCompressed = self.compressed;
+#endif // HAS_LIB_COMPRESSION_API
+  
   self.movieFilename = @""; // phony assign to disable check in superclass
   
   // Superclass load method asserts that self.movieFilename is not nil
@@ -159,10 +167,12 @@
              rgbAssetPath:qualRGBPath
           alphaAssetPath:qualAlphaPath
             phonyOutPath:phonyOutPath
-                 outPath:outPath];
+                 outPath:outPath
+            isCompressed:isCompressed];
   
   return;
 }
+
 // FHMediaFilter Add
 - (void)loadWithGroup:(dispatch_queue_t)group {
     self.syncLoadMark = YES;
@@ -185,6 +195,7 @@
                  rgbPath:(NSString*)rgbPath
                alphaPath:(NSString*)alphaPath
                 genAdler:(BOOL)genAdler
+            isCompressed:(BOOL)isCompressed
 {
   // Open both the rgb and alpha mvid files for reading
   
@@ -220,7 +231,7 @@
     return FALSE;
   }
   
-  // BPP for decoded asset is always 24 BPP
+  // BPP for decoded asset is always 32 BPP
 
   // framerate
   
@@ -361,9 +372,44 @@
     // frame diffs when processing on the device as that takes too long.
     
     int numBytesInBuffer = (int) combinedFrameBuffer.numBytes;
-        
-    worked = [fileWriter writeKeyframe:(char*)combinedPixels bufferSize:numBytesInBuffer];
     
+#if defined(HAS_LIB_COMPRESSION_API)
+    // If compression is used, then generate a compressed buffer and write it as
+    // a keyframe.
+    
+    if (isCompressed) @autoreleasepool {
+      NSData *pixelData = [NSData dataWithBytesNoCopy:combinedPixels length:numBytesInBuffer freeWhenDone:NO];
+      
+      // FIXME: make this mutable data a member so that it is not allocated
+      // in every loop.
+      
+      NSMutableData *mEncodedData = [NSMutableData data];
+      
+      [AVStreamEncodeDecode streamDeltaAndCompress:pixelData
+                                       encodedData:mEncodedData
+                                               bpp:fileWriter.bpp
+                                         algorithm:COMPRESSION_LZ4];
+      
+      //int src_size = bufferSize;
+      assert(mEncodedData.length > 0);
+      assert(mEncodedData.length < 0xFFFFFFFF);
+      int dst_size = (int) mEncodedData.length;
+      
+      //printf("compressed frame size %d kB down to %d kB\n", (int)src_size/1000, (int)dst_size/1000);
+      
+      // Calculate adler based on original pixels (not the compressed representation)
+      
+      uint32_t adler = 0;
+      adler = maxvid_adler32(0, (unsigned char*)combinedPixels, numBytesInBuffer);
+      
+      worked = [fileWriter writeKeyframe:(char*)mEncodedData.bytes bufferSize:(int)dst_size adler:adler isCompressed:TRUE];
+    } else {
+      worked = [fileWriter writeKeyframe:(char*)combinedPixels bufferSize:numBytesInBuffer];
+    }
+#else
+    worked = [fileWriter writeKeyframe:(char*)combinedPixels bufferSize:numBytesInBuffer];
+#endif // HAS_LIB_COMPRESSION_API
+
     if (worked == FALSE) {
       NSLog(@"cannot write keyframe data to mvid file \"%@\"", joinedMvidPath);
       return FALSE;
@@ -375,7 +421,20 @@
   [fileWriter rewriteHeader];
   [fileWriter close];
   
-  NSLog(@"Wrote %@", fileWriter.mvidPath);
+#if defined(DEBUG)
+  {
+    // Query the file length for the container, will be returned by length getter.
+    // If the file does not exist, then nil is returned.
+    NSDictionary *attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:fileWriter.mvidPath error:nil];
+    if (attrs != nil) {
+      unsigned long long fileSize = [attrs fileSize];
+      size_t fileSizeT = (size_t) fileSize;
+      NSAssert(fileSize == fileSizeT, @"assignment from unsigned long long to size_t lost bits");
+      
+      NSLog(@"wrote \"%@\" at size %d kB", fileWriter.mvidPath, (int)fileSizeT/1000);
+    }
+  }
+#endif // DEBUG
   
   return TRUE;
 }
@@ -529,7 +588,7 @@
 {
   @autoreleasepool {
   
-  NSAssert([arr count] == 6, @"arr count");
+  NSAssert([arr count] == 7, @"arr count");
   
   // Pass 6 arguments : RGB_ASSET_PATH ALPHA_ASSET_PATH PHONY_OUT_PATH REAL_OUT_PATH SERIAL ADLER
 
@@ -539,13 +598,15 @@
   NSString *outPath = [arr objectAtIndex:3];
   NSNumber *serialLoadingNum = [arr objectAtIndex:4];
   NSNumber *alwaysGenerateAdler = [arr objectAtIndex:5];
+  NSNumber *isCompressedNum = [arr objectAtIndex:6];
+  BOOL isCompressed = [isCompressedNum boolValue];
   
   BOOL genAdler = ([alwaysGenerateAdler intValue] ? TRUE : FALSE);
   
   if ([serialLoadingNum boolValue]) {
     [self grabSerialResourceLoaderLock];
   }
-  
+    
   // Check to see if the output file already exists. If the resource exists at this
   // point, then there is no reason to kick off another decode operation. For example,
   // in the serial loading case, a previous load could have loaded the resource.
@@ -565,7 +626,7 @@
          
     // Iterate over RGB and ALPHA for each frame in the two movies and join the pixel values
     
-    worked = [self joinRGBAndAlpha:phonyOutPath rgbPath:rgbAssetPath alphaPath:alphaAssetPath genAdler:genAdler];
+    worked = [self joinRGBAndAlpha:phonyOutPath rgbPath:rgbAssetPath alphaPath:alphaAssetPath genAdler:genAdler isCompressed:isCompressed];
     NSAssert(worked, @"joinRGBAndAlpha");
     
     // Move phony tmp filename to the expected filename once writes are complete
@@ -576,14 +637,12 @@
     NSLog(@"wrote %@", outPath);
 #endif // LOGGING
   }
-
-      
+  
   if ([serialLoadingNum boolValue]) {
     [self releaseSerialResourceLoaderLock];
   }
   
   }
 }
-
 
 @end

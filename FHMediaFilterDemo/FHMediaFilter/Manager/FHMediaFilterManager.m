@@ -157,6 +157,9 @@ static NSString *const kErrorDomain = @"FHVideoFilterManager Compose Error";
         AVAssetJoinAlphaResourceLoader *resLoader = [AVAssetJoinAlphaResourceLoader aVAssetJoinAlphaResourceLoader];
         resLoader.movieRGBFilename = video.rgbVideoName;
         resLoader.movieAlphaFilename = video.alphaVideoName;
+#if defined(HAS_LIB_COMPRESSION_API)
+        resLoader.compressed = YES;
+#endif // HAS_LIB_COMPRESSION_API
         resLoader.outPath = [AVFileUtil getTmpDirPath:[NSString stringWithFormat:@"%@",video.clipSource]];
         resLoader.alwaysGenerateAdler = TRUE;
         resLoader.serialLoading = TRUE;
@@ -174,6 +177,7 @@ static NSString *const kErrorDomain = @"FHVideoFilterManager Compose Error";
     
 #if defined(HAS_LIB_COMPRESSION_API)
     if ((1)) {
+        NSLog(@"compressed-------");
         comp.compressedIntermediate = TRUE;
         comp.compressedOutput = TRUE;
     }

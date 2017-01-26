@@ -64,21 +64,18 @@
         }else{
             FHMediaComponentVideo *video = [FHMediaComponentVideo videoComponentWithName:mp4Path type:@"mp4" rect:rect];
             video.clipSource = [NSString stringWithFormat:@"%@.mvid",[destinationZip stringByDeletingPathExtension]];
-            AVAsset2MvidResourceLoader *resLoader = [AVAsset2MvidResourceLoader aVAsset2MvidResourceLoader];
-            resLoader.movieFilename = video.rgbVideoName;
-            resLoader.movieSize = rect.size;
+            AVAssetJoinAlphaResourceLoader *resLoader = [AVAssetJoinAlphaResourceLoader aVAssetJoinAlphaResourceLoader];
+            resLoader.movieRGBFilename = video.rgbVideoName;
+            resLoader.movieAlphaFilename = video.alphaVideoName;
             resLoader.outPath = [AVFileUtil getTmpDirPath:[NSString stringWithFormat:@"%@",video.clipSource]];
             resLoader.alwaysGenerateAdler = TRUE;
             resLoader.serialLoading = TRUE;
 #if defined(HAS_LIB_COMPRESSION_API)
             NSLog(@"compressed");
             resLoader.compressed = YES;
-//            resLoader.rgbLoader.compressed = YES;
-//            resLoader.alphaLoader.compressed = YES;
 #endif // HAS_LIB_COMPRESSION_API
             //转换视频
             [resLoader load];
-//            [resLoader loadWithGroup:self.joinAlphaQueue];
             dispatch_barrier_async(self.joinAlphaQueue, ^{
                
             });
